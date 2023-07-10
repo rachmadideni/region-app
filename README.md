@@ -58,6 +58,25 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## How to setup a conventional commit
+# Install commitlint cli and conventional config
+npm install --save-dev @commitlint/{config-conventional,cli}
+# For Windows:
+npm install --save-dev @commitlint/config-conventional @commitlint/cli
+
+# Configure commitlint to use conventional config
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+
+To lint commits before they are created you can use Husky's commit-msg hook
+# Install Husky v6
+npm install husky --save-dev
+
+# Activate hooks
+npx husky install
+# or
+yarn husky install
+
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
