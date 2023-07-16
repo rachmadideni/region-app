@@ -12,7 +12,10 @@ async function bootstrap() {
     .addTag('openapi')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('region', app, document);  
+  SwaggerModule.setup('region', app, document);
+  app.enableCors({
+    origin: ['http://localhost:3005', 'http://localhost:5173'],
+  });
   await app.listen(3000);
 }
 bootstrap();

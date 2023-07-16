@@ -16,6 +16,9 @@ import { SubdistrictModule } from './subdistrict/subdistrict.module';
 import { SubdistricttypeModule } from './subdistricttype/subdistricttype.module';
 import { Subdistricttype } from './subdistricttype/entities/subdistricttype.entity';
 import { Subdistrict } from './subdistrict/entities/subdistrict.entity';
+import { ApikeyModule } from './apikey/apikey.module';
+import { Apikey } from './apikey/entities/apikey.entity';
+import { ApiConsumer } from './apikey/entities/apiconsumer.entity';
 
 @Module({
   imports: [
@@ -29,12 +32,28 @@ import { Subdistrict } from './subdistrict/entities/subdistrict.entity';
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASS,
       database: process.env.MYSQL_DB,
-      entities:[Province,Citytipe,City,District,Subdistricttype,Subdistrict],
+      entities: [
+        Province,
+        Citytipe,
+        City,
+        District,
+        Subdistricttype,
+        Subdistrict,
+        Apikey,
+        ApiConsumer,
+      ],
       autoLoadEntities: false,
       synchronize: true,
       // debug: true,
     }),
-    ProvinceModule,DistrictModule, CityModule, CitytipeModule, SubdistrictModule, SubdistricttypeModule,SubdistrictModule,
+    ProvinceModule,
+    DistrictModule,
+    CityModule,
+    CitytipeModule,
+    SubdistrictModule,
+    SubdistricttypeModule,
+    SubdistrictModule,
+    ApikeyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
