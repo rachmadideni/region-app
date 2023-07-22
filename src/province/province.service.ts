@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProvinceDto } from './dto/create-province.dto';
 import { UpdateProvinceDto } from './dto/update-province.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,8 +7,21 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProvinceService {
-  constructor(@InjectRepository(Province)private provinceRepository:Repository<Province>,) { }
+  constructor(
+    @InjectRepository(Province)
+    private provinceRepository: Repository<Province>,
+  ) {}
   async create(createProvinceDto: CreateProvinceDto) {
+    const current = await this.provinceRepository.findOne({
+      where: {
+        oid_province: createProvinceDto.oid_province,
+      },
+    });
+
+    if (current) {
+      throw new HttpException('oid is already taken', HttpStatus.CONFLICT);
+    }
+
     return this.provinceRepository.save(createProvinceDto);
   }
 
@@ -23,15 +36,19 @@ export class ProvinceService {
   update(id: number, updateProvinceDto: UpdateProvinceDto) {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.provinceRepository.update({ id }, { province_name: updateProvinceDto.province_name});
+        await this.provinceRepository.update(
+          { id },
+          { province_name: updateProvinceDto.province_name },
+        );
         resolve(this.findOne(id));
       } catch (error) {
-        reject(error)
+        console.log(error);
+        reject(error);
       }
     });
   }
 
   remove(id: number) {
-    return this.provinceRepository.delete({id});
+    return this.provinceRepository.delete({ id });
   }
 }

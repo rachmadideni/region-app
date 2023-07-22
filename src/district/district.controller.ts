@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
@@ -9,7 +20,10 @@ export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Post()
-  async create(@Body() createDistrictDto: CreateDistrictDto, @Res() response: Response) {
+  async create(
+    @Body() createDistrictDto: CreateDistrictDto,
+    @Res() response: Response,
+  ) {
     try {
       const res = await this.districtService.create(createDistrictDto);
       response.status(HttpStatus.OK).json({
@@ -26,13 +40,15 @@ export class DistrictController {
   }
 
   @Get()
-  async findAll(@Query() params: any) {
-    const districtAll = await this.districtService.findAll(params && params.oid_city);
+  async findAll() // @Query() params: any
+  {
+    // const districtAll = await this.districtService.findAll(params && params.oid_city);
+    const districtAll = await this.districtService.findAll();
     return {
       statusCode: 200,
       message: 'success',
-      data: districtAll??[]
-    }
+      data: districtAll ?? [],
+    };
   }
 
   @Get(':id')
@@ -41,18 +57,22 @@ export class DistrictController {
     return {
       statusCode: 200,
       message: 'success',
-      data: district??[]
-    }
+      data: district ?? [],
+    };
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateDistrictDto: UpdateDistrictDto, @Res() response: Response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateDistrictDto: UpdateDistrictDto,
+    @Res() response: Response,
+  ) {
     try {
       const res = await this.districtService.update(+id, updateDistrictDto);
       response.status(HttpStatus.OK).json({
         message: 'District has been Updated Successfully',
         district: res,
-      })
+      });
     } catch (error) {
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'No District Update',
@@ -67,11 +87,11 @@ export class DistrictController {
       await this.districtService.remove(+id);
       return {
         message: 'District has been deleted successfully',
-      }
+      };
     } catch (error) {
       return {
         message: 'No District Deleted',
-      }
+      };
     }
   }
 }

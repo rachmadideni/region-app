@@ -1,15 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 import { CityService } from './city.service';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
 import { Response } from 'express';
+import {
+  // ApiTags,
+  // ApiOperation,
+  // ApiResponse,
+  // ApiOkResponse,
+  ApiConflictResponse,
+  // ApiBadRequestResponse,
+} from '@nestjs/swagger';
 
 @Controller('city')
 export class CityController {
   constructor(private readonly cityService: CityService) {}
 
   @Post()
-  async create(@Body() createCityDto: CreateCityDto, @Res() response: Response) {
+  @ApiConflictResponse({
+    description: 'oid city is already taken',
+    schema: {
+      example: {
+        message: 'oid city is already taken',
+        // province: null,
+      },
+    },
+  })
+  async create(
+    @Body() createCityDto: CreateCityDto,
+    @Res() response: Response,
+  ) {
     try {
       const res = await this.cityService.create(createCityDto);
       response.status(HttpStatus.OK).json({
@@ -17,7 +48,12 @@ export class CityController {
         city: res,
       });
     } catch (error) {
-      // console.log(error)
+      if (error.status === HttpStatus.CONFLICT) {
+        response.status(HttpStatus.CONFLICT).json({
+          message: 'oid city is already taken',
+          data: null,
+        });
+      }
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'No City Added successfully',
         city: null,
@@ -27,14 +63,14 @@ export class CityController {
 
   @Get()
   async findAll(@Query() params: any) {
-
-
-    const cityAll = await this.cityService.findAll(params && params.oid_province);
+    const cityAll = await this.cityService.findAll(
+      params && params.oid_province,
+    );
     return {
       statusCode: 200,
       message: 'success',
-      data: cityAll??[]
-    }
+      data: cityAll ?? [],
+    };
   }
 
   @Get(':id')
@@ -43,18 +79,22 @@ export class CityController {
     return {
       statusCode: 200,
       message: 'success',
-      data: city??[]
-    }
+      data: city ?? [],
+    };
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateCityDto: UpdateCityDto, @Res() response: Response) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCityDto: UpdateCityDto,
+    @Res() response: Response,
+  ) {
     try {
       const res = await this.cityService.update(+id, updateCityDto);
       response.status(HttpStatus.OK).json({
         message: 'City has been Updated Successfully',
         city: res,
-      })
+      });
     } catch (error) {
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'No City Update',
@@ -69,11 +109,11 @@ export class CityController {
       await this.cityService.remove(+id);
       return {
         message: 'City has been deleted successfully',
-      }
+      };
     } catch (error) {
       return {
         message: 'no City deleted successfully',
-      }
+      };
     }
   }
 }

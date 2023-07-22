@@ -90,3 +90,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+### tutorials
+// https://dev.to/nithinkjoy/[class validator](how-to-use-class-validator-and-return-custom-error-object-in-nestjs-562h)
