@@ -33,11 +33,17 @@ export class CityService {
         province: { oid_province },
       };
     }
-    return this.cityRepository.find(opt);
+    const result = this.cityRepository.find(opt);
+    if (!result) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return result;
   }
 
-  findOne(id: number) {
-    return this.cityRepository.findOne({ where: { id: id } });
+  async findOne(id: number) {
+    const result = await this.cityRepository.findOne({ where: { id: id } });
+    return result;
   }
 
   findby(oid_province: string) {

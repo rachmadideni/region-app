@@ -8,35 +8,38 @@ import {
   Delete,
   Res,
   HttpStatus,
-  Query,
+  // Query,
 } from '@nestjs/common';
 import { CityService } from './city.service';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
 import { Response } from 'express';
 import {
-  // ApiTags,
   // ApiOperation,
   // ApiResponse,
   // ApiOkResponse,
   ApiConflictResponse,
+  ApiOperation,
+  ApiTags,
   // ApiBadRequestResponse,
 } from '@nestjs/swagger';
 
+@ApiTags('city')
 @Controller('city')
 export class CityController {
   constructor(private readonly cityService: CityService) {}
 
-  @Post()
+  @ApiOperation({ summary: 'Create new City' })
   @ApiConflictResponse({
     description: 'oid city is already taken',
     schema: {
       example: {
         message: 'oid city is already taken',
-        // province: null,
+        data: null,
       },
     },
   })
+  @Post()
   async create(
     @Body() createCityDto: CreateCityDto,
     @Res() response: Response,
@@ -49,40 +52,57 @@ export class CityController {
       });
     } catch (error) {
       if (error.status === HttpStatus.CONFLICT) {
-        response.status(HttpStatus.CONFLICT).json({
+        return response.status(HttpStatus.CONFLICT).json({
           message: 'oid city is already taken',
           data: null,
         });
       }
-      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+
+      if (error.status === HttpStatus.BAD_REQUEST) {
+        return response.status(HttpStatus.BAD_REQUEST).json({
+          message: 'Bad Request',
+          data: null,
+        });
+      }
+
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'No City Added successfully',
         city: null,
       });
     }
   }
 
+  @ApiOperation({ summary: 'Get all city' })
   @Get()
-  async findAll(@Query() params: any) {
-    const cityAll = await this.cityService.findAll(
-      params && params.oid_province,
-    );
-    return {
-      statusCode: 200,
-      message: 'success',
-      data: cityAll ?? [],
-    };
+  async findAll() {
+    try {
+      const allCities = await this.cityService.findAll();
+      return {
+        statusCode: 200,
+        message: 'success',
+        data: allCities ?? [],
+      };
+    } catch (err) {
+      console.log({ err });
+    }
   }
 
+  @ApiOperation({ summary: 'Get city by id' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const city = await this.cityService.findOne(+id);
-    return {
-      statusCode: 200,
-      message: 'success',
-      data: city ?? [],
-    };
+    try {
+      const city = await this.cityService.findOne(+id);
+      return {
+        statusCode: 200,
+        message: 'success',
+        data: city ?? null,
+      };
+    } catch (err) {
+      console.log({ err });
+    }
   }
 
+  @ApiOperation({ summary: 'Update city by id' })
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -103,6 +123,7 @@ export class CityController {
     }
   }
 
+  @ApiOperation({ summary: 'Delete city by id' })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
