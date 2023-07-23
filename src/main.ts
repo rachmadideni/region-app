@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
+      transform: true,
       exceptionFactory: (errors) => {
         const result = errors.map((error) => ({
           property: error.property,
@@ -19,8 +20,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Open API REGIONS')
-    .setDescription('The open api API description')
+    .setTitle('Open API REGION')
+    .setDescription('API REGION description')
     .setVersion('1.0')
     .addTag('openapi')
     .build();
