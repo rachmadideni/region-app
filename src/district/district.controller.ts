@@ -10,16 +10,22 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
-import { Response } from 'express';
+import { PageOptionsDto } from 'src/common/dtos/page-options.dto';
 
+@ApiTags('District / kecamatan')
 @Controller('district')
 export class DistrictController {
   constructor(private readonly districtService: DistrictService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'create new district',
+  })
   async create(
     @Body() createDistrictDto: CreateDistrictDto,
     @Res() response: Response,
@@ -40,18 +46,24 @@ export class DistrictController {
   }
 
   @Get()
-  async findAll() // @Query() params: any
-  {
-    // const districtAll = await this.districtService.findAll(params && params.oid_city);
-    const districtAll = await this.districtService.findAll();
+  @ApiOperation({
+    summary: 'Get all district',
+  })
+  // async findAll(@Query() pageOptionsDto: PageOptionsDto) {
+  async findAll() {
+    const districts = await this.districtService.findAll();
     return {
       statusCode: 200,
       message: 'success',
-      data: districtAll ?? [],
+      data: districts ? [...districts.data] : [],
+      // meta: districts ? { ...districts.meta } : null,
     };
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get district by id',
+  })
   async findOne(@Param('id') id: string) {
     const district = await this.districtService.findOne(+id);
     return {
@@ -62,6 +74,9 @@ export class DistrictController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Update dictrict by id',
+  })
   async update(
     @Param('id') id: string,
     @Body() updateDistrictDto: UpdateDistrictDto,
@@ -82,6 +97,9 @@ export class DistrictController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete district by id',
+  })
   async remove(@Param('id') id: string) {
     try {
       await this.districtService.remove(+id);
@@ -93,5 +111,41 @@ export class DistrictController {
         message: 'No District Deleted',
       };
     }
+  }
+
+  @Get('search/:name')
+  @ApiOperation({
+    summary: 'Search District by name',
+  })
+  async search(
+    @Param('name') name: string,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ) {
+    const districts = await this.districtService.searchByName(
+      name,
+      pageOptionsDto,
+    );
+    return {
+      statusCode: 200,
+      message: 'success',
+      data: districts ? [...districts.data] : [],
+      meta: districts ? { ...districts.meta } : null,
+    };
+  }
+
+  @Get('search/oid/:oid_district')
+  @ApiOperation({
+    summary: 'Search District by Oid',
+  })
+  async searchByOidDistrict(@Param('oid_district') oid_district: string) {
+    const subdistrict = await this.districtService.searchByOidDistrict(
+      oid_district,
+    );
+
+    return {
+      statusCode: 200,
+      message: 'success',
+      data: subdistrict ? [...subdistrict] : [],
+    };
   }
 }

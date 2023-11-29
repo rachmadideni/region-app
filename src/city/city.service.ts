@@ -58,6 +58,7 @@ export class CityService {
           {
             city_name: updateCityDto.city_name,
             oid_province: updateCityDto.oid_province,
+            oid_cititype: updateCityDto.oid_cititype,
           },
         );
         resolve(this.findOne(id));
