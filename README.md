@@ -76,6 +76,14 @@ npx husky install
 # or
 yarn husky install
 
+## Custom Pagination
+https://pietrzakadrian.com/blog/how-to-create-pagination-in-nestjs-with-typeorm-swagger
+
+Nice articles around pagination topic
+https://dev.to/inimist/react-table-server-side-pagination-with-sorting-and-search-3163
+
+https://medium.com/@amranwar/building-generic-pagination-and-order-in-nestjs-646a8ced4731
+
 
 ## Support
 

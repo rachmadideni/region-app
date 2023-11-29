@@ -44,6 +44,10 @@ import { ApiConsumer } from './apikey/entities/apiconsumer.entity';
       ],
       autoLoadEntities: false,
       synchronize: true,
+      extra: {
+        namedParameters: true,
+        namedPlacholders: true,
+      },
       // debug: true,
     }),
     ProvinceModule,

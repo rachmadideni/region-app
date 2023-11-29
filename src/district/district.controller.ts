@@ -49,13 +49,14 @@ export class DistrictController {
   @ApiOperation({
     summary: 'Get all district',
   })
-  async findAll(@Query() pageOptionsDto: PageOptionsDto) {
-    const districts = await this.districtService.findAll(pageOptionsDto);
+  // async findAll(@Query() pageOptionsDto: PageOptionsDto) {
+  async findAll() {
+    const districts = await this.districtService.findAll();
     return {
       statusCode: 200,
       message: 'success',
       data: districts ? [...districts.data] : [],
-      meta: districts ? { ...districts.meta } : null,
+      // meta: districts ? { ...districts.meta } : null,
     };
   }
 
@@ -110,5 +111,41 @@ export class DistrictController {
         message: 'No District Deleted',
       };
     }
+  }
+
+  @Get('search/:name')
+  @ApiOperation({
+    summary: 'Search District by name',
+  })
+  async search(
+    @Param('name') name: string,
+    @Query() pageOptionsDto: PageOptionsDto,
+  ) {
+    const districts = await this.districtService.searchByName(
+      name,
+      pageOptionsDto,
+    );
+    return {
+      statusCode: 200,
+      message: 'success',
+      data: districts ? [...districts.data] : [],
+      meta: districts ? { ...districts.meta } : null,
+    };
+  }
+
+  @Get('search/oid/:oid_district')
+  @ApiOperation({
+    summary: 'Search District by Oid',
+  })
+  async searchByOidDistrict(@Param('oid_district') oid_district: string) {
+    const subdistrict = await this.districtService.searchByOidDistrict(
+      oid_district,
+    );
+
+    return {
+      statusCode: 200,
+      message: 'success',
+      data: subdistrict ? [...subdistrict] : [],
+    };
   }
 }
