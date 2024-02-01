@@ -114,7 +114,8 @@ export class DistrictService {
       .skip(pageOptionsDto.skip)
       .take(pageOptionsDto.take);
 
-    // console.log(queryBuilder.getSql());
+    console.log('name', name);
+    console.log(queryBuilder.getSql());
     const itemCount = await queryBuilder.getCount();
     const { entities } = await queryBuilder.getRawAndEntities();
 

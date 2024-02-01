@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Validate } from 'class-validator';
+import { UniqueFieldValidator } from '../validators/unique.validator';
 export class CreateSubdistrictDto {
   /**
    * Object Id of subdistrict
@@ -6,6 +7,7 @@ export class CreateSubdistrictDto {
    */
   @IsNotEmpty()
   @IsString()
+  @Validate(UniqueFieldValidator, ['Subdistrict', 'oid_subdistrict'])
   oid_subdistrict: string;
 
   /**

@@ -18,6 +18,14 @@ export class SubdistrictService {
     return this.subdistrictRepository.save(createSubdistrictDto);
   }
 
+  async findByFieldValue(options: any) {
+    return this.subdistrictRepository.findOne({
+      where: {
+        ...options,
+      },
+    });
+  }
+
   // backup findAll
   /*
   findAll(oid_district?: string) {
@@ -76,6 +84,7 @@ export class SubdistrictService {
           {
             subdistrict_name: updateSubdistrictDto.subdistrict_name,
             post_code: updateSubdistrictDto.post_code,
+            oid_district: updateSubdistrictDto.oid_district,
           },
         );
         resolve(this.findOne(id));
