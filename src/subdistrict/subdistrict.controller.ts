@@ -49,18 +49,18 @@ export class SubdistrictController {
   @ApiOperation({
     summary: 'Get all subdistrict',
   })
-  // async findAll(@Query() pageOptionsDto: PageOptionsDto) {
-  async findAll() {
+  async findAll(@Query() pageOptionsDto: PageOptionsDto) {
+  // async findAll() {
     // const subdistrictAll = await this.subdistrictService.findAll(
     //   pageOptionsDto,
     // );
-    const subdistrictAll = await this.subdistrictService.findAll();
+    const subdistrictAll = await this.subdistrictService.findAll(pageOptionsDto);
     return {
       statusCode: 200,
       message: 'success',
-      data: subdistrictAll ? [...subdistrictAll] : [],
-      // data: subdistrictAll ? [...subdistrictAll.data] : [],
-      // meta: subdistrictAll ? { ...subdistrictAll.meta } : null,
+      // data: subdistrictAll ? [...subdistrictAll] : [],
+      data: subdistrictAll ? [...subdistrictAll.data] : [],
+      meta: subdistrictAll ? { ...subdistrictAll.meta } : null,
     };
   }
 

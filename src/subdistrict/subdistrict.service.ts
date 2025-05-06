@@ -41,32 +41,32 @@ export class SubdistrictService {
   }
   */
 
-  // async findAll(pageOptionsDto: PageOptionsDto) {
-  //   const queryBuilder =
-  //     this.subdistrictRepository.createQueryBuilder('subdistrict');
-  //   queryBuilder
-  //     .leftJoinAndSelect('subdistrict.districtes', 'd')
-  //     .orderBy('subdistrict.id', pageOptionsDto.order)
-  //     .skip(pageOptionsDto.skip)
-  //     .take(pageOptionsDto.take);
+  async findAll(pageOptionsDto: PageOptionsDto) {
+    const queryBuilder =
+      this.subdistrictRepository.createQueryBuilder('subdistrict');
+    queryBuilder
+      .leftJoinAndSelect('subdistrict.districtes', 'd')
+      .orderBy('subdistrict.id', pageOptionsDto.order)
+      .skip(pageOptionsDto.skip)
+      .take(pageOptionsDto.take);
 
-  //   const itemCount = await queryBuilder.getCount();
-  //   const { entities } = await queryBuilder.getRawAndEntities();
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
 
-  //   const pageMetaDto = new PageMetaDto({
-  //     itemCount,
-  //     pageOptionsDto,
-  //   });
-
-  //   return new PageDto(entities, pageMetaDto);
-  // }
-
-  async findAll() {
-    const subdistrictAll = await this.subdistrictRepository.find({
-      relations: ['districtes'],
+    const pageMetaDto = new PageMetaDto({
+      itemCount,
+      pageOptionsDto,
     });
-    return subdistrictAll;
+
+    return new PageDto(entities, pageMetaDto);
   }
+
+  // async findAll() {
+  //   const subdistrictAll = await this.subdistrictRepository.find({
+  //     relations: ['districtes'],
+  //   });
+  //   return subdistrictAll;
+  // }
 
   findOne(id: number) {
     return this.subdistrictRepository.findOne({ where: { id: id } });

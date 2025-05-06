@@ -49,14 +49,13 @@ export class DistrictController {
   @ApiOperation({
     summary: 'Get all district',
   })
-  // async findAll(@Query() pageOptionsDto: PageOptionsDto) {
-  async findAll() {
-    const districts = await this.districtService.findAll();
+  async findAll(@Query() pageOptionsDto: PageOptionsDto) {
+    const districts = await this.districtService.findAll(pageOptionsDto);
     return {
       statusCode: 200,
       message: 'success',
       data: districts ? [...districts.data] : [],
-      // meta: districts ? { ...districts.meta } : null,
+      meta: districts ? { ...districts.meta } : null,
     };
   }
 
