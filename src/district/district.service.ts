@@ -42,7 +42,7 @@ export class DistrictService {
     return this.districtRepository.find(opt);
   }*/
 
-  /*
+  
   async findAll(pageOptionsDto: PageOptionsDto) {
     const queryBuilder = this.districtRepository.createQueryBuilder('district');
     queryBuilder
@@ -61,7 +61,9 @@ export class DistrictService {
 
     return new PageDto(entities, pageMetaDto);
   }
-  */
+
+
+  /*
   async findAll() {
     const districts = await this.districtRepository.find({
       relations: ['cities'],
@@ -72,6 +74,7 @@ export class DistrictService {
       data: districts ? [...districts] : [],
     };
   }
+  */
 
   findOne(id: number) {
     return this.districtRepository.findOne({ where: { id: id } });
